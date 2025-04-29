@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareerGuide Pro - Find Your Future</title>
+    <link rel="stylesheet" href="index.css" >
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav-container">
+            <h1>CareerGuide Pro</h1>
+            <div class="nav-links">
+                <a href="#home">Home</a>
+                <a href="#courses">Courses</a>
+                <a href="#contact">Contact</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Home Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>Discover Your Perfect Career Path</h1>
+            <p>Explore 1000+ career options based on your skills and interests</p>
+            <input type="text" class="search-box" placeholder="Search courses or careers...">
+        </div>
+    </section>
+    <!-- Courses Section -->
+    <section id="courses" class="courses-container">
+        <h2 class="section-title">Explore Career Paths</h2>
+        <div class="filter-section" id="filterContainer"></div>
+        <div class="courses-grid" id="coursesGrid"></div>
+    </section>
+    <script>
+        // Complete Courses Data
+        const courses = [
+            {
+                name: "Engineering",
+                subjects: ['Mathematics', 'Physics'],
+                degrees: ["B.Tech", "BE", "Diploma"],
+                careers: ["Software Engineer", "Mechanical Engineer", "Civil Engineer"]
+            },
+            {
+                name: "Medical",
+                subjects: ['Biology', 'Chemistry'],
+                degrees: ["MBBS", "BDS", "BPT"],
+                careers: ["Doctor", "Surgeon", "Physiotherapist"]
+            },
+            {
+                name: "Data Science",
+                subjects: ['Mathematics', 'Computer Science'],
+                degrees: ["B.Sc Data Science", "B.Tech AI", "M.Sc Statistics"],
+                careers: ["Data Analyst", "ML Engineer", "Business Analyst"]
+            },
+            {
+                name: "Commerce",
+                subjects: ['Commerce', 'Mathematics'],
+                degrees: ["B.Com", "BBA", "CA"],
+                careers: ["Chartered Accountant", "Financial Analyst", "Banker"]
+            },
+            {
+                name: "Arts & Design",
+                subjects: ['Arts', 'Design'],
+                degrees: ["BFA", "B.Des", "BA Fine Arts"],
+                careers: ["Graphic Designer", "Art Director", "Animator"]
+            },
+            {
+                name: "Law",
+                subjects: ['Political Science', 'History'],
+                degrees: ["LLB", "BA LLB", "LLM"],
+                careers: ["Lawyer", "Judge", "Legal Advisor"]
+            },
+            {
+                name: "Agriculture",
+                subjects: ['Biology', 'Chemistry'],
+                degrees: ["B.Sc Agriculture", "B.Tech Food Tech"],
+                careers: ["Agricultural Scientist", "Horticulturist"]
+            }
+        ];
+
+        // Initialize Website
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeFilters();
+            displayCourses(courses);
+            addSmoothScroll();
+            setupSearch();
+        });
+
+        function initializeFilters() {
+            const subjects = ['Mathematics', 'Physics', 'Chemistry', 'Biology', 
+                            'Commerce', 'Arts', 'Computer Science', 'Design'];
+            const container = document.getElementById('filterContainer');
+            
+            subjects.forEach(subject => {
+                const btn = document.createElement('button');
+                btn.className = 'subject-btn';
+                btn.textContent = subject;
+                btn.addEventListener('click', () => {
+                    btn.classList.toggle('active');
+                    filterCourses();
+                });
+                container.appendChild(btn);
+            });
+        }
+
+        function filterCourses() {
+            const activeSubjects = Array.from(document.querySelectorAll('.subject-btn.active'))
+                                      .map(btn => btn.textContent);
+            
+            const filtered = courses.filter(course => 
+                course.subjects.some(subject => activeSubjects.includes(subject))
+            );
+            
+            displayCourses(filtered.length > 0 ? filtered : courses);
+        }
+
+        function displayCourses(coursesToShow) {
+            const grid = document.getElementById('coursesGrid');
+            grid.innerHTML = '';
+            
+            coursesToShow.forEach((course, index) => {
+                const card = document.createElement('div');
+                card.className = 'course-card';
+                card.innerHTML = `
+                    <h3>${course.name}</h3>
+                    <p><strong>Subjects:</strong> ${course.subjects.join(', ')}</p>
+                    <p><strong>Degrees:</strong> ${course.degrees.join(', ')}</p>
+                    <p><strong>Careers:</strong> ${course.careers.join(', ')}</p>
+                `;
+                card.style.animationDelay = `${index * 0.1}s`;
+                grid.appendChild(card);
+            });
+        }
+
+        function addSmoothScroll() {
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href'))
+                            .scrollIntoView({ behavior: 'smooth' });
+                });
+            });
+        }
+
+        function setupSearch() {
+            const searchBox = document.querySelector('.search-box');
+            searchBox.addEventListener('input', (e) => {
+                const term = e.target.value.toLowerCase();
+                const results = courses.filter(course => 
+                    course.name.toLowerCase().includes(term) ||
+                    course.degrees.some(deg => deg.toLowerCase().includes(term)) ||
+                    course.careers.some(career => career.toLowerCase().includes(term))
+                );
+                displayCourses(results);
+            });
+        }
+    </script>
+</body>
+</html>
