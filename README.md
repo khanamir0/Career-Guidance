@@ -8,7 +8,7 @@ Built with a focus on user-friendly design and responsive layout to provide a sm
 
 Key sections like career categories, resources, and exploration tools are already in place.
 
-#Progress Work
+# Progress Work
 The frontend will continue to be improved for better UI/UX, accessibility, and additional interactive features.
 
 The backend is yet to be integrated. Planned backend features include:
